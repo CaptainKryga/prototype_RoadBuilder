@@ -144,7 +144,7 @@ namespace Model
                         _cells[y][x].transform.Rotate(GameMetrics.RotatePoint((GameMetrics.Points)map[y][x]));
                         _cells[y][x].Debug.text = map[y][x].ToString();
                     }
-                }   
+                }
             }
         }
     }

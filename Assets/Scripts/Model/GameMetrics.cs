@@ -28,8 +28,12 @@ namespace Model
         {
             switch (point)
             {
-                case Points.EastSouth: return Vector3.forward * 90;
-                case Points.NorthEast: return Vector3.zero;
+                case Points.NorthSouth: return Vector3.zero;
+                case Points.WestEast: return Vector3.forward * 90;
+                // case Points.NorthEast: return Vector3.forward * 90;
+                // case Points.EastSouth: return Vector3.forward * 90;
+                // case Points.SouthWest: return Vector3.forward * 90;
+                // case Points.WestNorth: return Vector3.forward * 90;
                 default: return Vector3.zero;
             }
         }
