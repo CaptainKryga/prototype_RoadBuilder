@@ -6,5 +6,6 @@ namespace Model
     {
         public TMPro.TMP_Text Debug;
         public Cell Path;
+        public byte Type;
     }
 }
