@@ -20,6 +20,7 @@ namespace Model
         {
             _xMax = GameMetrics.SizeSquare * _generateLevel.SizeMap.x;
             _yMax = GameMetrics.SizeSquare * _generateLevel.SizeMap.y;
+            _camera.transform.position = new Vector3(_xMax / 2, _yMax / 2, -10);
         }
 
         private void Update()
