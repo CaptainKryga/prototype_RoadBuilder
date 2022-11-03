@@ -178,14 +178,16 @@ namespace Model
                         _cells[y][x].Type = map[y][x];
 
 
-                        if (map[y][x] is (byte) GameMetrics.Points.PointA or (byte) GameMetrics.Points.PointB)
-                            continue;
-                        
-                        float x2 = Random.Range(0, GameMetrics.SizeMap.x);
-                        float y2 = Random.Range(0, GameMetrics.SizeMap.y);
-                        _cells[y][x].transform.position = new Vector3(x2, y2);
-                        //
-                        // Debug.Log("gg");
+                        if (map[y][x] == (byte) GameMetrics.Points.PointA)
+                            GameMetrics.PointA = new Vector3Int(y, x);
+                        else if (map[y][x] == (byte) GameMetrics.Points.PointA)
+                            GameMetrics.PointB = new Vector3Int(y, x);
+                        // else
+                        // {
+                        //     float x2 = Random.Range(0, GameMetrics.SizeMap.x);
+                        //     float y2 = Random.Range(0, GameMetrics.SizeMap.y);
+                        //     _cells[y][x].transform.position = new Vector3(x2, y2);
+                        // }
                     }
                 }
             }

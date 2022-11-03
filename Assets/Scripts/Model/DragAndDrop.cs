@@ -36,13 +36,21 @@ namespace Model
         {
             if (type != CustomInputBase.Mouse.ClickDown) return;
 
-            Ray ray = _camera.ScreenPointToRay(mousePosition);
-            Physics.Raycast(ray, out RaycastHit info);
-
-            if (info.collider && info.collider.GetComponent<Cell>())
+            Collider2D[] results = new Collider2D[1];
+            Physics2D.OverlapCircleNonAlloc(_camera.ScreenToWorldPoint(mousePosition), 0.11f, results);
+            
+            if (!results[0]) return;
+            
+            _cell = results[0].GetComponent<Cell>();
+            if (_cell && 
+                _cell.Type != (byte)GameMetrics.Points.PointA && 
+                _cell.Type != (byte)GameMetrics.Points.PointB)
             {
-                _cell = info.collider.GetComponent<Cell>();
                 _customInput.InputMousePosition_Action += Drag;
+            }
+            else
+            {
+                _cell = null;
             }
         }
 

@@ -13,6 +13,8 @@ namespace Scriptable
 
         [SerializeField] private Cell _prefabClear;
 
+        public Transform PrefabCube;
+
         public Cell GetPrefabFromType(GameMetrics.Points type)
         {
             switch (type)

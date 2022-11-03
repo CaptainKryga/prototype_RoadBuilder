@@ -1,4 +1,5 @@
 
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Model
@@ -7,6 +8,8 @@ namespace Model
     {
         public static Vector2Int SizeMap;
         public static float SizeSquare = 1;
+        public static Vector3Int PointA;
+        public static Vector3Int PointB;
         
         public enum Points
         {
