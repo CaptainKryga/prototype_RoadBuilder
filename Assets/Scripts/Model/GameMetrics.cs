@@ -19,7 +19,7 @@ namespace Model
             EastSouth,
             SouthWest,
             WestNorth,
-            //Point A and B
+            //Point's A and B
             PointA,
             PointB,
         }
@@ -30,10 +30,11 @@ namespace Model
             {
                 case Points.NorthSouth: return Vector3.zero;
                 case Points.WestEast: return Vector3.forward * 90;
-                // case Points.NorthEast: return Vector3.forward * 90;
-                // case Points.EastSouth: return Vector3.forward * 90;
-                // case Points.SouthWest: return Vector3.forward * 90;
-                // case Points.WestNorth: return Vector3.forward * 90;
+                
+                case Points.NorthEast: return Vector3.zero;
+                case Points.WestNorth: return Vector3.forward * 90;
+                case Points.SouthWest: return Vector3.forward * 180;
+                case Points.EastSouth: return Vector3.forward * 270;
                 default: return Vector3.zero;
             }
         }

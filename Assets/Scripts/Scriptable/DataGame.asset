@@ -16,3 +16,4 @@ MonoBehaviour:
   _prefabB: {fileID: 142960280400717162, guid: ea8e0e9a5de813845be2558100839842, type: 3}
   _prefab90: {fileID: 142960280400717162, guid: b886375c0b866fe479a8ef6711abdbcc, type: 3}
   _prefab180: {fileID: 142960280400717162, guid: 58761a983fdc9864388e4ff5fb59a582, type: 3}
+  _prefabClear: {fileID: 142960280400717162, guid: ce8655bc17da0b944b5a02ca7f00622f, type: 3}
