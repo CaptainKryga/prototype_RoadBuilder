@@ -5,6 +5,7 @@ namespace Model
 {
     public static class GameMetrics
     {
+        public static Vector2Int SizeMap;
         public static float SizeSquare = 1;
         
         public enum Points

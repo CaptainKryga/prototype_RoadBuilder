@@ -11,22 +11,16 @@ namespace Model
         private byte[][] _map;
         private Cell[][] _cells;
 
-        private Vector2Int _sizeMap;
-        public Vector2Int SizeMap
-        {
-            get => _sizeMap;
-        }
-
         private void Awake()
         {
-            _sizeMap = new Vector2Int(10, 10);//Random.Range(4, 10);
+            GameMetrics.SizeMap = new Vector2Int(10, 10);//Random.Range(4, 10);
 
-            _map = new byte[_sizeMap.y][];
-            _cells = new Cell[_sizeMap.y][];
+            _map = new byte[GameMetrics.SizeMap.y][];
+            _cells = new Cell[GameMetrics.SizeMap.y][];
             for (int y = 0; y < _map.Length; y++)
             {
-                _map[y] = new byte[_sizeMap.x];
-                _cells[y] = new Cell[_sizeMap.x];
+                _map[y] = new byte[GameMetrics.SizeMap.x];
+                _cells[y] = new Cell[GameMetrics.SizeMap.x];
             }
             
             SetupPoints(_map);
@@ -67,7 +61,7 @@ namespace Model
                 if (map[path.Pos.y][path.Pos.x] == (byte) end)
                     break;
                 
-                if (path.Pos.y + 1 < _sizeMap.y && map[path.Pos.y + 1][path.Pos.x] is 
+                if (path.Pos.y + 1 < GameMetrics.SizeMap.y && map[path.Pos.y + 1][path.Pos.x] is 
                     (byte)GameMetrics.Points.Clear or (byte)GameMetrics.Points.PointB)
                 {
                     PathFinderSetupCell(map, queue,path.Pos + Vector2Int.up, index, path);
@@ -77,7 +71,7 @@ namespace Model
                 {
                     PathFinderSetupCell(map, queue,path.Pos - Vector2Int.up, index, path);
                 }
-                if (path.Pos.x + 1 < _sizeMap.x && map[path.Pos.y][path.Pos.x + 1] is 
+                if (path.Pos.x + 1 < GameMetrics.SizeMap.x && map[path.Pos.y][path.Pos.x + 1] is 
                     (byte)GameMetrics.Points.Clear or (byte)GameMetrics.Points.PointB)
                 {
                     PathFinderSetupCell(map, queue,path.Pos + Vector2Int.right, index, path);
@@ -174,7 +168,7 @@ namespace Model
             {
                 for (int x = 0; x < map.Length; x++)
                 {
-                    if (map[y][x] >= (byte) GameMetrics.Points.Clear && 
+                    if (map[y][x] > (byte) GameMetrics.Points.Clear && 
                         map[y][x] <= (byte) GameMetrics.Points.PointB)
                     {
                         _cells[y][x] = Instantiate(_dataGame.GetPrefabFromType((GameMetrics.Points)map[y][x]),
@@ -182,6 +176,16 @@ namespace Model
                         _cells[y][x].transform.Rotate(GameMetrics.RotatePoint((GameMetrics.Points)map[y][x]));
                         _cells[y][x].Debug.text = map[y][x].ToString();
                         _cells[y][x].Type = map[y][x];
+
+
+                        if (map[y][x] is (byte) GameMetrics.Points.PointA or (byte) GameMetrics.Points.PointB)
+                            continue;
+                        
+                        float x2 = Random.Range(0, GameMetrics.SizeMap.x);
+                        float y2 = Random.Range(0, GameMetrics.SizeMap.y);
+                        _cells[y][x].transform.position = new Vector3(x2, y2);
+                        //
+                        // Debug.Log("gg");
                     }
                 }
             }

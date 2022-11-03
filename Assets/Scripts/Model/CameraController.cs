@@ -4,8 +4,6 @@ namespace Model
 {
     public class CameraController : MonoBehaviour
     {
-        [SerializeField] private GenerateLevel _generateLevel;
-        
         [SerializeField] private float _speed;
         
         private Camera _camera;
@@ -18,8 +16,8 @@ namespace Model
 
         public void Init()
         {
-            _xMax = GameMetrics.SizeSquare * _generateLevel.SizeMap.x;
-            _yMax = GameMetrics.SizeSquare * _generateLevel.SizeMap.y;
+            _xMax = GameMetrics.SizeSquare * GameMetrics.SizeMap.x;
+            _yMax = GameMetrics.SizeSquare * GameMetrics.SizeMap.y;
             _camera.transform.position = new Vector3(_xMax / 2, _yMax / 2, -10);
         }
 
