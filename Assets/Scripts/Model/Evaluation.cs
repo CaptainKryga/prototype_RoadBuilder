@@ -51,22 +51,20 @@ namespace Model
 
         private Queue<Vector3> SetupStartVector(Vector3 startPos)
         {
-            Queue<Vector3> queue = new Queue<Vector3>();
-            Cell cell, preCell = null;
-            Vector3 nextPos = Vector3.zero;
-            Vector3 parentVector = startPos;
-
             //PointA
+            Queue<Vector3> queue = new Queue<Vector3>();
             queue.Enqueue(GameMetrics.PointA);
+            
             //get next cell
             Collider2D[] results = new Collider2D[1];
             Physics2D.OverlapCircleNonAlloc(startPos, 0.1f, results);
             if (!results[0])
                 return queue;
             
-            cell = results[0].GetComponent<Cell>();
+            Cell cell = results[0].GetComponent<Cell>();
 
-            nextPos = GameMetrics.PointA + (cell.Points[1].position - GameMetrics.PointA) / 2;
+            //get border PointA and Cell
+            Vector3 nextPos = GameMetrics.PointA + (cell.Points[1].position - GameMetrics.PointA) / 2;
             queue.Enqueue(nextPos);
 
             int index = 0;
@@ -110,7 +108,6 @@ namespace Model
 
         IEnumerator PushEvaluation(Queue<Vector3>[] paths, Transform[] cubes)
         {
-            Vector3[] queue = new Vector3[paths.Length];
             while (true)
             {
                 bool flag = true;
@@ -144,6 +141,8 @@ namespace Model
             {
                 if (cubes[x].position != GameMetrics.PointB)
                     eval = false;
+                
+                Destroy(cubes[x].gameObject);
             }
             Debug.Log("Level " + (eval ? "WIN" : "DEFEAT"));
             yield break;
