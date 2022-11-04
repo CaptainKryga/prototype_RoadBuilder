@@ -6,5 +6,7 @@ namespace Model
     {
         public TMPro.TMP_Text Debug;
         public byte Type;
+
+        public Transform[] Points;
     }
 }
