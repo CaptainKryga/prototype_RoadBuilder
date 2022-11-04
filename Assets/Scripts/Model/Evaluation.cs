@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Controller.CustomInput;
 using Scriptable;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace Model
         [SerializeField] private CustomInputBase _customInput;
         [SerializeField] private DataGame _dataGame;
         
-        private Queue<Cell>[] _paths;
+        private Queue<Vector3>[] _paths;
         private Transform[] _cubes;
         private Camera _camera;
 
@@ -33,43 +34,119 @@ namespace Model
         {
             if (key != KeyCode.Alpha6) return;
             
-            _paths = new Queue<Cell>[4];
+            _paths = new Queue<Vector3>[1];
             _paths[0] = SetupStartVector(GameMetrics.PointA + Vector3Int.up);
-            _paths[1] = SetupStartVector(GameMetrics.PointA - Vector3Int.up);
-            _paths[2] = SetupStartVector(GameMetrics.PointA + Vector3Int.right);
-            _paths[3] = SetupStartVector((GameMetrics.PointA - Vector3Int.right));
+            // _paths[1] = SetupStartVector(GameMetrics.PointA - Vector3Int.up);
+            // _paths[2] = SetupStartVector(GameMetrics.PointA + Vector3Int.right);
+            // _paths[3] = SetupStartVector((GameMetrics.PointA - Vector3Int.right));
 
-            _cubes = new Transform[4];
+            _cubes = new Transform[1];
             _cubes[0] = Instantiate(_dataGame.PrefabCube, GameMetrics.PointA, Quaternion.identity);
-            _cubes[1] = Instantiate(_dataGame.PrefabCube, GameMetrics.PointA, Quaternion.identity);
-            _cubes[2] = Instantiate(_dataGame.PrefabCube, GameMetrics.PointA, Quaternion.identity);
-            _cubes[3] = Instantiate(_dataGame.PrefabCube, GameMetrics.PointA, Quaternion.identity);
+            // _cubes[1] = Instantiate(_dataGame.PrefabCube, GameMetrics.PointA, Quaternion.identity);
+            // _cubes[2] = Instantiate(_dataGame.PrefabCube, GameMetrics.PointA, Quaternion.identity);
+            // _cubes[3] = Instantiate(_dataGame.PrefabCube, GameMetrics.PointA, Quaternion.identity);
 
-            PushEvaluation(_paths, _cubes);
+            StartCoroutine(PushEvaluation(_paths, _cubes));
         }
 
-        private Queue<Cell> SetupStartVector(Vector3 startPos)
+        private Queue<Vector3> SetupStartVector(Vector3 startPos)
         {
-            Queue<Cell> queue = new Queue<Cell>();
+            Queue<Vector3> queue = new Queue<Vector3>();
+            Cell cell, preCell = null;
+            Vector3 nextPos = Vector3.zero;
+            Vector3 parentVector = startPos;
+
+            //PointA
+            queue.Enqueue(GameMetrics.PointA);
+            //get next cell
+            Collider2D[] results = new Collider2D[1];
+            Physics2D.OverlapCircleNonAlloc(startPos, 0.1f, results);
+            if (!results[0])
+                return queue;
             
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(startPos, 0.11f);
-            foreach (var coll in colliders)
+            cell = results[0].GetComponent<Cell>();
+
+            nextPos = GameMetrics.PointA + (cell.Points[1].position - GameMetrics.PointA) / 2;
+            queue.Enqueue(nextPos);
+
+            int index = 0;
+            while (cell)
             {
-                Cell cell = coll.GetComponent<Cell>();
-                if (cell)
+                if (cell.Type != (byte) GameMetrics.Points.PointB)
                 {
-                    queue.Enqueue(cell);
-                    Debug.Log("cell: " + cell.gameObject.name);
+                    if (cell.Points[0].position == nextPos)
+                    {
+                        queue.Enqueue(cell.Points[1].position);
+                        queue.Enqueue(cell.Points[2].position);
+                        nextPos = cell.Points[2].position;
+                    }
+                    else if (cell.Points[2].position == nextPos)
+                    {
+                        queue.Enqueue(cell.Points[1].position);
+                        queue.Enqueue(cell.Points[0].position);
+                        nextPos = cell.Points[0].position;
+                    }
+                }
+                else
+                {
+                    queue.Enqueue(GameMetrics.PointB);
                     break;
                 }
+
+                results = new Collider2D[1];
+                Physics2D.OverlapCircleNonAlloc(nextPos + (nextPos - cell.Points[1].position), 0.1f, results);
+
+                if (!results[0])
+                    break;
+                cell = results[0].GetComponent<Cell>();
+                queue.Enqueue(nextPos);
+
+                if (index++ == 1000)
+                    break;
             }
 
             return queue;
         }
 
-        private void PushEvaluation(Queue<Cell>[] paths, Transform[] cubes)
+        IEnumerator PushEvaluation(Queue<Vector3>[] paths, Transform[] cubes)
         {
+            Vector3[] queue = new Vector3[paths.Length];
+            while (true)
+            {
+                bool flag = true;
+                for (int x = 0; x < paths.Length; x++)
+                {
+                    if (paths[x].Count > 0)
+                        flag = false;
+                }
+                if (flag)
+                    break;
+                
+                for (int x = 0; x < paths.Length; x++)
+                {
+                    if (paths[x].Count == 0)
+                        continue;
 
+                    if (paths[x].Peek() != cubes[x].position)
+                    {
+                        cubes[x].position = Vector3.MoveTowards(cubes[x].position, paths[x].Peek(), Time.deltaTime);
+                    }
+                    else
+                        paths[x].Dequeue();
+                }
+                
+                yield return new WaitForEndOfFrame();
+            }
+            
+            Debug.Log("COMPLETE");
+            bool eval = true;
+            for (int x = 0; x < cubes.Length; x++)
+            {
+                if (cubes[x].position != GameMetrics.PointB)
+                    eval = false;
+            }
+            Debug.Log("Level " + (eval ? "WIN" : "DEFEAT"));
+            yield break;
         }
     }
 }

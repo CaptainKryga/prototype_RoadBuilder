@@ -28,14 +28,14 @@ namespace Model
             RecursiveSetRoad(_map, PathFinder(_map, new Vector2Int(1, 1), GameMetrics.Points.PointB));
             PathFinderCleanUp(_map);
             
-            RecursiveSetRoad(_map, PathFinder(_map, new Vector2Int(1, 1), GameMetrics.Points.PointB));
-            PathFinderCleanUp(_map);
-            
-            RecursiveSetRoad(_map, PathFinder(_map, new Vector2Int(1, 1), GameMetrics.Points.PointB));
-            PathFinderCleanUp(_map);
-            
-            RecursiveSetRoad(_map, PathFinder(_map, new Vector2Int(1, 1), GameMetrics.Points.PointB));
-            PathFinderCleanUp(_map);
+            // RecursiveSetRoad(_map, PathFinder(_map, new Vector2Int(1, 1), GameMetrics.Points.PointB));
+            // PathFinderCleanUp(_map);
+            //
+            // RecursiveSetRoad(_map, PathFinder(_map, new Vector2Int(1, 1), GameMetrics.Points.PointB));
+            // PathFinderCleanUp(_map);
+            //
+            // RecursiveSetRoad(_map, PathFinder(_map, new Vector2Int(1, 1), GameMetrics.Points.PointB));
+            // PathFinderCleanUp(_map);
             
             VisibleMap(_map);
         }
@@ -180,7 +180,7 @@ namespace Model
 
                         if (map[y][x] == (byte) GameMetrics.Points.PointA)
                             GameMetrics.PointA = new Vector3Int(y, x);
-                        else if (map[y][x] == (byte) GameMetrics.Points.PointA)
+                        else if (map[y][x] == (byte) GameMetrics.Points.PointB)
                             GameMetrics.PointB = new Vector3Int(y, x);
                         // else
                         // {
