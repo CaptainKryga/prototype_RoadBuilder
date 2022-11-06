@@ -13,7 +13,7 @@ namespace Model
 
         private void Awake()
         {
-            GameMetrics.SizeMap = new Vector2Int(10, 10); //Random.Range(4, 10);
+            GameMetrics.SizeMap = new Vector2Int(Random.Range(4, 20), Random.Range(4, 20)); //Random.Range(4, 10);
             
             GameMetrics.Paths = new Vector3[2];
             GameMetrics.Paths[0] = Vector3.down;
@@ -37,7 +37,7 @@ namespace Model
             }
 
             VisibleMap(_map, _cells);
-            RandomRoads(_cells);
+            // RandomRoads(_cells);
         }
 
         private void SetupPoints(byte[][] map)
@@ -104,7 +104,7 @@ namespace Model
         {
             for (int y = 0; y < map.Length; y++)
             {
-                for (int x = 0; x < map.Length; x++)
+                for (int x = 0; x < map[y].Length; x++)
                 {
                     if (map[y][x] > (byte) GameMetrics.Points.PointB)
                         map[y][x] = (byte) GameMetrics.Points.Clear;
@@ -172,7 +172,7 @@ namespace Model
         {
             for (int y = 0; y < map.Length; y++)
             {
-                for (int x = 0; x < map.Length; x++)
+                for (int x = 0; x < map[y].Length; x++)
                 {
                     if (map[y][x] > (byte) GameMetrics.Points.Clear &&
                         map[y][x] <= (byte) GameMetrics.Points.PointB)
@@ -188,40 +188,6 @@ namespace Model
                             GameMetrics.PointA = new Vector3Int(y, x);
                         else if (map[y][x] == (byte) GameMetrics.Points.PointB)
                             GameMetrics.PointB = new Vector3Int(y, x);
-                        // else
-                        // {
-                        //     float x2 = Random.Range(0, GameMetrics.SizeMap.x);
-                        //     float y2 = Random.Range(0, GameMetrics.SizeMap.y);
-                        //     _cells[y][x].transform.position = new Vector3(x2, y2);
-                        // }
-                    }
-                }
-            }
-        }
-
-        private void RandomRoads(Cell[][] cells)
-        {
-            for (int y = 0; y < cells.Length; y++)
-            {
-                for (int x = 0; x < cells.Length; x++)
-                {
-                    int y2 = Random.Range(0, GameMetrics.SizeMap.y);
-                    int x2 = Random.Range(0, GameMetrics.SizeMap.x);
-                    
-                    if (cells[y][x] && cells[y][x].Type is (byte)GameMetrics.Points.PointA or (byte)GameMetrics.Points.PointB)
-                        continue;
-                    
-                    if (cells[y2][x2] && cells[y2][x2].Type is (byte)GameMetrics.Points.PointA or (byte)GameMetrics.Points.PointB)
-                        continue;
-
-                    if (cells[y][x] && cells[y2][x2])
-                    {
-                        (cells[y][x].transform.position, cells[y2][x2].transform.position) =
-                            (cells[y2][x2].transform.position, cells[y][x].transform.position);
-                    }
-                    else if (cells[y][x])
-                    {
-                        cells[y][x].transform.position = new Vector3(x2, y2);
                     }
                 }
             }
