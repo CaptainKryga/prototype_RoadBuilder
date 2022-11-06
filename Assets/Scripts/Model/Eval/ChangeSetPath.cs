@@ -3,7 +3,7 @@ using Controller.CustomInput;
 using Model.Static;
 using UnityEngine;
 
-namespace Model
+namespace Model.Eval
 {
     public class ChangeSetPath : MonoBehaviour
     {

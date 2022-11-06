@@ -1,8 +1,6 @@
-
-using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Model
+namespace Model.Static
 {
     public static class GameMetrics
     {

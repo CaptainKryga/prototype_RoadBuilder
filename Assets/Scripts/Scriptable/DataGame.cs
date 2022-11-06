@@ -1,4 +1,6 @@
 ﻿using Model;
+using Model.Components;
+using Model.Static;
 using UnityEngine;
 
 namespace Scriptable
@@ -6,16 +8,16 @@ namespace Scriptable
     [CreateAssetMenu(fileName = "DataGame", menuName = "ScriptableObjects/DataGame", order = 1)]
     public class DataGame : ScriptableObject
     {
-        [SerializeField] private Cell _prefabA;
-        [SerializeField] private Cell _prefabB;
-        [SerializeField] private Cell _prefab90;
-        [SerializeField] private Cell _prefab180;
+        [SerializeField] private Entity _prefabA;
+        [SerializeField] private Entity _prefabB;
+        [SerializeField] private Entity _prefab90;
+        [SerializeField] private Entity _prefab180;
 
-        [SerializeField] private Cell _prefabClear;
+        [SerializeField] private Entity _prefabClear;
 
         public Transform PrefabCube;
 
-        public Cell GetPrefabFromType(GameMetrics.Points type)
+        public Entity GetPrefabFromType(GameMetrics.Points type)
         {
             switch (type)
             {

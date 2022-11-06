@@ -7,7 +7,7 @@ using Scriptable;
 using UnityEngine;
 using View.Game;
 
-namespace Model
+namespace Model.Eval
 {
     public class Evaluation : MonoBehaviour
     {
@@ -58,35 +58,37 @@ namespace Model
             if (!results[0])
                 return queue;
             
-            CellDynamic cellDynamic = results[0].GetComponent<CellDynamic>();
-            if (!cellDynamic || (cellDynamic && cellDynamic.Type is (byte) GameMetrics.Points.PointB or (byte) GameMetrics.Points.PointA))
+            Entity entity = results[0].GetComponent<Entity>();
+            if (!entity || (entity && entity.IsStatic))
                 return queue;
+            
+            Transform[] Points = ((CellDynamic) entity).Points;
 
             //get border PointA and Cell
-            Vector3 nextPos = GameMetrics.PointA + (cellDynamic.Points[1].position - GameMetrics.PointA) / 2;
+            Vector3 nextPos = GameMetrics.PointA + (Points[1].position - GameMetrics.PointA) / 2;
             queue.Enqueue(nextPos);
 
-            int index = 0;
-            while (cellDynamic)
+            while (entity)
             {
-                if (cellDynamic.Type is (byte) GameMetrics.Points.PointA or (byte) GameMetrics.Points.PointB)
+                if (entity.IsStatic)
                 {
-                    queue.Enqueue(cellDynamic.Type == (byte) GameMetrics.Points.PointA ?
+                    queue.Enqueue(entity.Type == (byte) GameMetrics.Points.PointA ?
                         GameMetrics.PointA : GameMetrics.PointB);
                     break;
                 }
 
-                if (cellDynamic.Points[0].position == nextPos)
+
+                if (Points[0].position == nextPos)
                 {
-                    queue.Enqueue(cellDynamic.Points[1].position);
-                    queue.Enqueue(cellDynamic.Points[2].position);
-                    nextPos = cellDynamic.Points[2].position;
+                    queue.Enqueue(Points[1].position);
+                    queue.Enqueue(Points[2].position);
+                    nextPos = Points[2].position;
                 }
-                else if (cellDynamic.Points[2].position == nextPos)
+                else if (Points[2].position == nextPos)
                 {
-                    queue.Enqueue(cellDynamic.Points[1].position);
-                    queue.Enqueue(cellDynamic.Points[0].position);
-                    nextPos = cellDynamic.Points[0].position;
+                    queue.Enqueue(Points[1].position);
+                    queue.Enqueue(Points[0].position);
+                    nextPos = Points[0].position;
                 }
                 else
                 {
@@ -94,15 +96,14 @@ namespace Model
                 }
 
                 results = new Collider2D[1];
-                Physics2D.OverlapCircleNonAlloc(nextPos + (nextPos - cellDynamic.Points[1].position), 0.1f, results);
+                Physics2D.OverlapCircleNonAlloc(nextPos + (nextPos - Points[1].position), 0.1f, results);
 
                 if (!results[0])
                     break;
-                cellDynamic = results[0].GetComponent<CellDynamic>();
+                entity = results[0].GetComponent<Entity>();
                 queue.Enqueue(nextPos);
-
-                if (index++ == 1000)
-                    break;
+                
+                Points = !entity.IsStatic ? ((CellDynamic) entity).Points : null;
             }
 
             return queue;

@@ -1,4 +1,6 @@
 using Controller.CustomInput;
+using Model.Components;
+using Model.Static;
 using UnityEngine;
 
 namespace Model
@@ -6,7 +8,7 @@ namespace Model
     public class DragAndDrop : MonoBehaviour
     {
         [SerializeField] private CustomInputBase _customInput;
-        private Cell _cell;
+        private CellDynamic _cellDynamic;
         
         private float _xMax, _yMax;
         private Camera _camera;
@@ -41,16 +43,14 @@ namespace Model
             
             if (!results[0]) return;
             
-            _cell = results[0].GetComponent<Cell>();
-            if (_cell && 
-                _cell.Type != (byte)GameMetrics.Points.PointA && 
-                _cell.Type != (byte)GameMetrics.Points.PointB)
+            _cellDynamic = results[0].GetComponent<CellDynamic>();
+            if (_cellDynamic)
             {
                 _customInput.InputMousePosition_Action += Drag;
             }
             else
             {
-                _cell = null;
+                _cellDynamic = null;
             }
         }
 
@@ -65,7 +65,7 @@ namespace Model
             Physics2D.OverlapCircleNonAlloc(newPos, 0.1f, results);
             if (results[0]) return;
             
-            _cell.transform.position = newPos;
+            _cellDynamic.transform.position = newPos;
         }
 
         private float RoundFloat(float x)
@@ -81,7 +81,7 @@ namespace Model
         {
             if (type != CustomInputBase.Mouse.ClickUp) return;
             
-            _cell = null;
+            _cellDynamic = null;
             
             _customInput.InputMousePosition_Action -= Drag;
         }
@@ -90,7 +90,7 @@ namespace Model
         {
             if (type != CustomInputBase.Mouse.Scroll) return;
 
-            if (_cell) _cell.transform.Rotate(Vector3.forward * 90 * (axis.x > 0 ? 1 : -1));
+            if (_cellDynamic) _cellDynamic.transform.Rotate(Vector3.forward * 90 * (axis.x > 0 ? 1 : -1));
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using Model;
+using Model.Static;
+using UnityEngine;
 
-namespace Model
+namespace Controller
 {
     public class CameraController : MonoBehaviour
     {

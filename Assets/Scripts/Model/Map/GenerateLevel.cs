@@ -5,7 +5,7 @@ using Model.Static;
 using Scriptable;
 using UnityEngine;
 
-namespace Model
+namespace Model.Map
 {
     public class GenerateLevel : MonoBehaviour
     {
@@ -46,6 +46,7 @@ namespace Model
             map[1][1] = (byte) GameMetrics.Points.PointA;
             GameMetrics.PointA = new Vector3Int(1, 1);
             map[^1][^1] = (byte) GameMetrics.Points.PointB;
+            GameMetrics.PointB = new Vector3Int(GameMetrics.SizeMap.x - 1, GameMetrics.SizeMap.y - 1);
         }
 
         private Path PathFinder(byte[][] map, Vector2Int start, GameMetrics.Points end)
@@ -178,17 +179,16 @@ namespace Model
                     if (map[y][x] > (byte) GameMetrics.Points.Clear &&
                         map[y][x] <= (byte) GameMetrics.Points.PointB)
                     {
-                        cells[y][x] = Instantiate(_dataGame.GetPrefabFromType((GameMetrics.Points) map[y][x]),
-                            new Vector3(x, y), Quaternion.identity, _parent);
+                        cells[y][x] = Instantiate(_dataGame.GetPrefabFromType((GameMetrics.Points) map[y][x]), 
+                            _parent);
                         cells[y][x].transform.Rotate(GameMetrics.RotatePoint((GameMetrics.Points) map[y][x]));
-                        cells[y][x].Debug.text = map[y][x].ToString();
-                        cells[y][x].Type = map[y][x];
+                        cells[y][x].Setup(map[y][x]);
 
 
-                        if (map[y][x] == (byte) GameMetrics.Points.PointA)
-                            GameMetrics.PointA = new Vector3Int(x, y);
-                        else if (map[y][x] == (byte) GameMetrics.Points.PointB)
-                            GameMetrics.PointB = new Vector3Int(x, y);
+                        // if (map[y][x] == (byte) GameMetrics.Points.PointA)
+                        //     GameMetrics.PointA = new Vector3Int(x, y);
+                        // else if (map[y][x] == (byte) GameMetrics.Points.PointB)
+                        //     GameMetrics.PointB = new Vector3Int(x, y);
                     }
                 }
             }
