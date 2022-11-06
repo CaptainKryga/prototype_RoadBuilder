@@ -37,7 +37,7 @@ namespace Model
             if (type != CustomInputBase.Mouse.ClickDown) return;
 
             Collider2D[] results = new Collider2D[1];
-            Physics2D.OverlapCircleNonAlloc(_camera.ScreenToWorldPoint(mousePosition), 0.11f, results);
+            Physics2D.OverlapCircleNonAlloc(_camera.ScreenToWorldPoint(mousePosition), 0.1f, results);
             
             if (!results[0]) return;
             
@@ -60,6 +60,10 @@ namespace Model
             newPos.x = (int)RoundFloat(Mathf.Clamp(newPos.x, 0f, _xMax));
             newPos.y = (int)RoundFloat(Mathf.Clamp(newPos.y, 0f, _yMax));
             newPos.z = 0;
+            
+            Collider2D[] results = new Collider2D[1];
+            Physics2D.OverlapCircleNonAlloc(newPos, 0.1f, results);
+            if (results[0]) return;
             
             _cell.transform.position = newPos;
         }
