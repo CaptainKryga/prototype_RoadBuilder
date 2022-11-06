@@ -58,7 +58,10 @@ namespace Model
                 if (!arrow)
                     return;
                 
-                GameMetrics.Paths[_id] = arrow.Vector;
+                if (GameMetrics.Paths[_id == 0 ? 1 : 0] != arrow.Vector)
+                    GameMetrics.Paths[_id] = arrow.Vector;
+                else
+                    return;
 
                 UpdateColorPaths();
                 

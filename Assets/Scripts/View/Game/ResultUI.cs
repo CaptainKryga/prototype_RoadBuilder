@@ -6,7 +6,6 @@ namespace View.Game
     public class ResultUI : MonoBehaviour
     {
         [SerializeField] private ViewController _view;
-        [SerializeField] private GameObject _panelBlocker;
         [SerializeField] private GameObject _panelResultUI;
 
         [SerializeField] private MenuGameBase _gameOver;
@@ -18,15 +17,12 @@ namespace View.Game
 
         public void OnClick_Result()
         {
-            _panelBlocker.SetActive(true);
             _view.Result();
+            _panelResultUI.SetActive(false);
         }
 
         public void GameOver(bool isWin)
         {
-            _panelBlocker.SetActive(false);
-            _panelResultUI.SetActive(false);
-            
             ((MenuGameOver) _gameOver).SetTitle(isWin);
             _gameOver.UsePanel();
         }

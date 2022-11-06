@@ -60,7 +60,8 @@ namespace Model
                 return queue;
             
             Cell cell = results[0].GetComponent<Cell>();
-            if (cell.Type == (byte) GameMetrics.Points.PointA)
+            if (cell && cell.Type is (byte) GameMetrics.Points.PointB or 
+                (byte) GameMetrics.Points.PointA)
                 return queue;
 
             //get border PointA and Cell
@@ -70,7 +71,8 @@ namespace Model
             int index = 0;
             while (cell)
             {
-                if (cell.Type != (byte) GameMetrics.Points.PointB)
+                if (cell.Type is (byte) GameMetrics.Points.PointB or 
+                    (byte) GameMetrics.Points.PointA)
                 {
                     if (cell.Points[0].position == nextPos)
                     {

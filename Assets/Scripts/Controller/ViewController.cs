@@ -5,6 +5,7 @@ namespace Controller
 {
     public class ViewController : MonoBehaviour
     {
+        [SerializeField] private DragAndDrop _dragAndDrop;
         [SerializeField] private ChangeSetPath _changeSetPath;
         [SerializeField] private Evaluation _evaluation;
         public void Pause(bool flag)
@@ -19,6 +20,7 @@ namespace Controller
 
         public void Result()
         {
+            _dragAndDrop.enabled = false;
             _evaluation.Result();
         }
     }
