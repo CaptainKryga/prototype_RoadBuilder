@@ -31,6 +31,12 @@ namespace Model
         
         public void SetPath(int id)
         {
+            if (id == -1)
+            {
+                DisableArrows();
+                return;
+            }
+                
             if (_isArrow)
                 return;
             
@@ -49,12 +55,16 @@ namespace Model
         {
             if (key == CustomInputBase.Mouse.ClickDown)
             {
-                Collider2D[] results = new Collider2D[1];
+                Collider2D[] results = new Collider2D[10];
+                PathArrow arrow = null;
                 Physics2D.OverlapCircleNonAlloc(_camera.ScreenToWorldPoint(mousePosition), 0.1f, results);
-                if (!results[0])
-                    return;
-            
-                PathArrow arrow = results[0].GetComponent<PathArrow>();
+                foreach (var coll in results)
+                {
+                    arrow = coll.GetComponent<PathArrow>();
+                    if (arrow)
+                        break;
+                }
+
                 if (!arrow)
                     return;
                 
@@ -63,11 +73,16 @@ namespace Model
                 else
                     return;
 
-                UpdateColorPaths();
-                
-                _customInput.InputMouse_Action -= MouseClick;
-                _isArrow = false;
+                DisableArrows();
             }
+        }
+
+        private void DisableArrows()
+        {
+            UpdateColorPaths();
+                
+            _customInput.InputMouse_Action -= MouseClick;
+            _isArrow = false;
         }
 
         private void UpdateColorPaths()

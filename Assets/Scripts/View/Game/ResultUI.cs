@@ -17,6 +17,7 @@ namespace View.Game
 
         public void OnClick_Result()
         {
+            _view.SetPath(-1);
             _view.Result();
             _panelResultUI.SetActive(false);
         }

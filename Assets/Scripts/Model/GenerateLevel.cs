@@ -13,7 +13,7 @@ namespace Model
 
         private void Awake()
         {
-            GameMetrics.SizeMap = new Vector2Int(Random.Range(4, 20), Random.Range(4, 20)); //Random.Range(4, 10);
+            GameMetrics.SizeMap = new Vector2Int(Random.Range(4, 10), Random.Range(4, 10)); //Random.Range(4, 10);
             
             GameMetrics.Paths = new Vector3[2];
             GameMetrics.Paths[0] = Vector3.down;
@@ -185,9 +185,9 @@ namespace Model
 
 
                         if (map[y][x] == (byte) GameMetrics.Points.PointA)
-                            GameMetrics.PointA = new Vector3Int(y, x);
+                            GameMetrics.PointA = new Vector3Int(x, y);
                         else if (map[y][x] == (byte) GameMetrics.Points.PointB)
-                            GameMetrics.PointB = new Vector3Int(y, x);
+                            GameMetrics.PointB = new Vector3Int(x, y);
                     }
                 }
             }

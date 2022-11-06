@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace View.Game
 {
@@ -17,11 +16,6 @@ namespace View.Game
         {
             _textWin.text = isWin ? "WIN" : "DEFEAT";
             _textScore.text = "Score: " + score;
-        }
-
-        public void OnClick_NextLevel()
-        {
-            SceneManager.LoadScene(1);
         }
     }
 }

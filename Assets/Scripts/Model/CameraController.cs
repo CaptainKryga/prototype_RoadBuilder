@@ -12,10 +12,7 @@ namespace Model
         private void Start()
         {
             _camera = Camera.main;
-        }
-
-        public void Init()
-        {
+            
             _xMax = GameMetrics.SizeSquare * GameMetrics.SizeMap.x;
             _yMax = GameMetrics.SizeSquare * GameMetrics.SizeMap.y;
             _camera.transform.position = new Vector3(_xMax / 2, _yMax / 2, -10);
