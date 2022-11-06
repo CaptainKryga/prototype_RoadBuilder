@@ -21,9 +21,9 @@ namespace View.Game
             _panelResultUI.SetActive(false);
         }
 
-        public void GameOver(bool isWin)
+        public void GameOver(bool isWin, int score)
         {
-            ((MenuGameOver) _gameOver).SetTitle(isWin);
+            ((MenuGameOver) _gameOver).SetTitle(isWin, score);
             _gameOver.UsePanel();
         }
     }

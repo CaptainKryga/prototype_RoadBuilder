@@ -60,8 +60,7 @@ namespace Model
                 return queue;
             
             Cell cell = results[0].GetComponent<Cell>();
-            if (cell && cell.Type is (byte) GameMetrics.Points.PointB or 
-                (byte) GameMetrics.Points.PointA)
+            if (cell && cell.Type is (byte) GameMetrics.Points.PointB)
                 return queue;
 
             //get border PointA and Cell
@@ -71,25 +70,32 @@ namespace Model
             int index = 0;
             while (cell)
             {
-                if (cell.Type is (byte) GameMetrics.Points.PointB or 
-                    (byte) GameMetrics.Points.PointA)
+                if (cell.Type == (byte) GameMetrics.Points.PointA)
                 {
-                    if (cell.Points[0].position == nextPos)
-                    {
-                        queue.Enqueue(cell.Points[1].position);
-                        queue.Enqueue(cell.Points[2].position);
-                        nextPos = cell.Points[2].position;
-                    }
-                    else if (cell.Points[2].position == nextPos)
-                    {
-                        queue.Enqueue(cell.Points[1].position);
-                        queue.Enqueue(cell.Points[0].position);
-                        nextPos = cell.Points[0].position;
-                    }
+                    queue.Enqueue(GameMetrics.PointA);
+                    break;
+                }
+
+                if (cell.Type == (byte) GameMetrics.Points.PointB)
+                {
+                    queue.Enqueue(GameMetrics.PointB);
+                    break;
+                }
+
+                if (cell.Points[0].position == nextPos)
+                {
+                    queue.Enqueue(cell.Points[1].position);
+                    queue.Enqueue(cell.Points[2].position);
+                    nextPos = cell.Points[2].position;
+                }
+                else if (cell.Points[2].position == nextPos)
+                {
+                    queue.Enqueue(cell.Points[1].position);
+                    queue.Enqueue(cell.Points[0].position);
+                    nextPos = cell.Points[0].position;
                 }
                 else
                 {
-                    queue.Enqueue(GameMetrics.PointB);
                     break;
                 }
 
@@ -115,6 +121,12 @@ namespace Model
 
         private IEnumerator PushEvaluation(Queue<Vector3>[] paths, Transform[] cubes)
         {
+            int score = 0;
+            foreach (var path in paths)
+            {
+                score += path.Count;
+            }
+            
             while (true)
             {
                 bool flag = true;
@@ -152,7 +164,7 @@ namespace Model
                 Destroy(cubes[x].gameObject);
             }
             Debug.Log("Level " + (eval ? "WIN" : "DEFEAT"));
-            _resultUI.GameOver(eval);
+            _resultUI.GameOver(eval, score * (eval ? 10 : 1));
             yield break;
         }
     }

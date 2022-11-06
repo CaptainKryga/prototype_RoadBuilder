@@ -13,10 +13,10 @@ namespace View.Game
             SetEnable(true);
         }
 
-        public void SetTitle(bool isWin)
+        public void SetTitle(bool isWin, int score)
         {
             _textWin.text = isWin ? "WIN" : "DEFEAT";
-            _textScore.text = "Score: 123";
+            _textScore.text = "Score: " + score;
         }
 
         public void OnClick_NextLevel()
