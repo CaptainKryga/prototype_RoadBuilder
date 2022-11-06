@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using Model.Components;
+using Model.Pathfinder;
+using Model.Static;
 using Scriptable;
 using UnityEngine;
 
@@ -7,9 +10,7 @@ namespace Model
     public class GenerateLevel : MonoBehaviour
     {
         [SerializeField] private DataGame _dataGame;
-
-        private byte[][] _map;
-        private Cell[][] _cells;
+        [SerializeField] private Transform _parent;
 
         private void Awake()
         {
@@ -19,25 +20,25 @@ namespace Model
             GameMetrics.Paths[0] = Vector3.down;
             GameMetrics.Paths[1] = Vector3.left;
 
-            _map = new byte[GameMetrics.SizeMap.y][];
-            _cells = new Cell[GameMetrics.SizeMap.y][];
-            for (int y = 0; y < _map.Length; y++)
+            byte[][] map = new byte[GameMetrics.SizeMap.y][];
+            Entity[][] cells = new Entity[GameMetrics.SizeMap.y][];
+            for (int y = 0; y < map.Length; y++)
             {
-                _map[y] = new byte[GameMetrics.SizeMap.x];
-                _cells[y] = new Cell[GameMetrics.SizeMap.x];
+                map[y] = new byte[GameMetrics.SizeMap.x];
+                cells[y] = new Entity[GameMetrics.SizeMap.x];
             }
 
-            SetupPoints(_map);
+            SetupPoints(map);
 
             for (int x = 0; x < GameMetrics.Paths.Length; x++)
             {
-                RecursiveSetRoad(_map, PathFinder(_map, (Vector2Int) GameMetrics.PointA,
+                RecursiveSetRoad(map, PathFinder(map, (Vector2Int) GameMetrics.PointA,
                     GameMetrics.Points.PointB));
-                PathFinderCleanUp(_map);
+                PathFinderCleanUp(map);
             }
 
-            VisibleMap(_map, _cells);
-            RandomRoads(_cells);
+            VisibleMap(map, cells);
+            RandomRoads(cells);
         }
 
         private void SetupPoints(byte[][] map)
@@ -168,7 +169,7 @@ namespace Model
         }
 
 
-        private void VisibleMap(byte[][] map, Cell[][] cells)
+        private void VisibleMap(byte[][] map, Entity[][] cells)
         {
             for (int y = 0; y < map.Length; y++)
             {
@@ -178,7 +179,7 @@ namespace Model
                         map[y][x] <= (byte) GameMetrics.Points.PointB)
                     {
                         cells[y][x] = Instantiate(_dataGame.GetPrefabFromType((GameMetrics.Points) map[y][x]),
-                            new Vector3(x, y), Quaternion.identity);
+                            new Vector3(x, y), Quaternion.identity, _parent);
                         cells[y][x].transform.Rotate(GameMetrics.RotatePoint((GameMetrics.Points) map[y][x]));
                         cells[y][x].Debug.text = map[y][x].ToString();
                         cells[y][x].Type = map[y][x];
@@ -193,7 +194,7 @@ namespace Model
             }
         }
 
-        private void RandomRoads(Cell[][] cells)
+        private void RandomRoads(Entity[][] cells)
         {
             for (int y = 0; y < cells.Length; y++)
             {
@@ -202,12 +203,7 @@ namespace Model
                     int y2 = Random.Range(0, GameMetrics.SizeMap.y);
                     int x2 = Random.Range(0, GameMetrics.SizeMap.x);
 
-                    if (cells[y][x] &&
-                        cells[y][x].Type is (byte) GameMetrics.Points.PointA or (byte) GameMetrics.Points.PointB)
-                        continue;
-
-                    if (cells[y2][x2] &&
-                        cells[y2][x2].Type is (byte) GameMetrics.Points.PointA or (byte) GameMetrics.Points.PointB)
+                    if (cells[y][x] && cells[y][x].IsStatic || cells[y2][x2] && cells[y2][x2].IsStatic)
                         continue;
 
                     (cells[y][x], cells[y2][x2]) = (cells[y2][x2], cells[y][x]);
@@ -222,18 +218,6 @@ namespace Model
                         cells[y][x].transform.position = new Vector3(x, y);
                 }
             }
-        }
-    }
-
-    public class Path
-    {
-        public Vector2Int Pos;
-        public Path Child;
-
-        public Path(Vector2Int pos, Path child)
-        {
-            Pos = pos;
-            Child = child;
         }
     }
 }

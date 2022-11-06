@@ -1,5 +1,6 @@
 using System.Linq;
 using Controller.CustomInput;
+using Model.Static;
 using UnityEngine;
 
 namespace Model

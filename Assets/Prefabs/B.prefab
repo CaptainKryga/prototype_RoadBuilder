@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3833622260390912022}
   - component: {fileID: 3833622260390912021}
-  - component: {fileID: 142960280400717162}
   - component: {fileID: -7589789922849039018}
+  - component: {fileID: 4551816030501728073}
   m_Layer: 0
   m_Name: B
   m_TagString: Untagged
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 32767
   m_Sprite: {fileID: 21300000, guid: fbe0e65038951ae4ab5211a421a93395, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -87,20 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &142960280400717162
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3833622260390912020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bdaf69467012804fa5645f60fe17867, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Debug: {fileID: 221099019443288073}
-  Type: 0
 --- !u!61 &-7589789922849039018
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -127,6 +113,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &4551816030501728073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3833622260390912020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04603c30ba4dcd049b912b13f19133f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Debug: {fileID: 221099019443288073}
+  Type: 0
+  IsStatic: 0
 --- !u!1 &7022680601674543935
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,7 +173,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7022680601674543935}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
