@@ -10,6 +10,8 @@ namespace Model
         public static float SizeSquare = 1;
         public static Vector3Int PointA;
         public static Vector3Int PointB;
+
+        public static Vector3[] Paths;
         
         public enum Points
         {

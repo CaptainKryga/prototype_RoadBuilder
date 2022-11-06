@@ -11,10 +11,5 @@ namespace Controller
         {
             _modelController.Restart();
         }
-        
-        public void Pause(bool flag)
-        {
-            
-        }
     }
 }

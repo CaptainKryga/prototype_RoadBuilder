@@ -5,7 +5,7 @@ namespace View.Game
 {
     public class MenuPause : MenuGameBase
     {
-        [SerializeField] private GlobalController _globalController;
+        [SerializeField] private ViewController _view;
 
         public override void UsePanel()
         {
@@ -15,7 +15,7 @@ namespace View.Game
         public void OnClick_SetPause()
         {
             PanelBase.SetActive(!PanelBase.activeSelf);
-            _globalController.Pause(PanelBase.activeSelf);
+            _view.Pause(PanelBase.activeSelf);
         }
     }
 }

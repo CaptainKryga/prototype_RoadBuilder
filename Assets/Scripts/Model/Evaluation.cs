@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Controller.CustomInput;
 using Scriptable;
 using UnityEngine;
+using View.Game;
 
 namespace Model
 {
@@ -10,12 +11,13 @@ namespace Model
     {
         [SerializeField] private CustomInputBase _customInput;
         [SerializeField] private DataGame _dataGame;
+        [SerializeField] private ResultUI _resultUI;
         
         private Queue<Vector3>[] _paths;
         private Transform[] _cubes;
         private Camera _camera;
 
-        private void Start()
+        private void Awake()
         {
             _camera = Camera.main;
         }
@@ -33,18 +35,14 @@ namespace Model
         private void PrePush(KeyCode key, bool isDown)
         {
             if (key != KeyCode.Alpha6) return;
-            
-            _paths = new Queue<Vector3>[1];
-            _paths[0] = SetupStartVector(GameMetrics.PointA + Vector3Int.up);
-            // _paths[1] = SetupStartVector(GameMetrics.PointA - Vector3Int.up);
-            // _paths[2] = SetupStartVector(GameMetrics.PointA + Vector3Int.right);
-            // _paths[3] = SetupStartVector((GameMetrics.PointA - Vector3Int.right));
 
-            _cubes = new Transform[1];
-            _cubes[0] = Instantiate(_dataGame.PrefabCube, GameMetrics.PointA, Quaternion.identity);
-            // _cubes[1] = Instantiate(_dataGame.PrefabCube, GameMetrics.PointA, Quaternion.identity);
-            // _cubes[2] = Instantiate(_dataGame.PrefabCube, GameMetrics.PointA, Quaternion.identity);
-            // _cubes[3] = Instantiate(_dataGame.PrefabCube, GameMetrics.PointA, Quaternion.identity);
+            _paths = new Queue<Vector3>[GameMetrics.Paths.Length];
+            _cubes = new Transform[GameMetrics.Paths.Length];
+            for (int x = 0; x < GameMetrics.Paths.Length; x++)
+            {
+                _paths[x] = SetupStartVector(GameMetrics.PointA + GameMetrics.Paths[x]);
+                _cubes[x] = Instantiate(_dataGame.PrefabCube, GameMetrics.PointA, Quaternion.identity);
+            }
 
             StartCoroutine(PushEvaluation(_paths, _cubes));
         }
@@ -62,6 +60,8 @@ namespace Model
                 return queue;
             
             Cell cell = results[0].GetComponent<Cell>();
+            if (cell.Type == (byte) GameMetrics.Points.PointA)
+                return queue;
 
             //get border PointA and Cell
             Vector3 nextPos = GameMetrics.PointA + (cell.Points[1].position - GameMetrics.PointA) / 2;
@@ -106,7 +106,12 @@ namespace Model
             return queue;
         }
 
-        IEnumerator PushEvaluation(Queue<Vector3>[] paths, Transform[] cubes)
+        public void Result()
+        {
+            PrePush(KeyCode.Alpha6, true);
+        }
+
+        private IEnumerator PushEvaluation(Queue<Vector3>[] paths, Transform[] cubes)
         {
             while (true)
             {
@@ -145,6 +150,7 @@ namespace Model
                 Destroy(cubes[x].gameObject);
             }
             Debug.Log("Level " + (eval ? "WIN" : "DEFEAT"));
+            _resultUI.GameOver(eval);
             yield break;
         }
     }

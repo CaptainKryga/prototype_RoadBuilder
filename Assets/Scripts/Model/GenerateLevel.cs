@@ -14,6 +14,10 @@ namespace Model
         private void Awake()
         {
             GameMetrics.SizeMap = new Vector2Int(10, 10); //Random.Range(4, 10);
+            
+            GameMetrics.Paths = new Vector3[2];
+            GameMetrics.Paths[0] = Vector3.down;
+            GameMetrics.Paths[1] = Vector3.left;
 
             _map = new byte[GameMetrics.SizeMap.y][];
             _cells = new Cell[GameMetrics.SizeMap.y][];
@@ -25,17 +29,12 @@ namespace Model
 
             SetupPoints(_map);
 
-            RecursiveSetRoad(_map, PathFinder(_map, new Vector2Int(1, 1), GameMetrics.Points.PointB));
-            PathFinderCleanUp(_map);
-
-            // RecursiveSetRoad(_map, PathFinder(_map, new Vector2Int(1, 1), GameMetrics.Points.PointB));
-            // PathFinderCleanUp(_map);
-            //
-            // RecursiveSetRoad(_map, PathFinder(_map, new Vector2Int(1, 1), GameMetrics.Points.PointB));
-            // PathFinderCleanUp(_map);
-            //
-            // RecursiveSetRoad(_map, PathFinder(_map, new Vector2Int(1, 1), GameMetrics.Points.PointB));
-            // PathFinderCleanUp(_map);
+            for (int x = 0; x < GameMetrics.Paths.Length; x++)
+            {
+                RecursiveSetRoad(_map, PathFinder(_map, (Vector2Int)GameMetrics.PointA, 
+                    GameMetrics.Points.PointB));
+                PathFinderCleanUp(_map);
+            }
 
             VisibleMap(_map, _cells);
             RandomRoads(_cells);
@@ -44,6 +43,7 @@ namespace Model
         private void SetupPoints(byte[][] map)
         {
             map[1][1] = (byte) GameMetrics.Points.PointA;
+            GameMetrics.PointA = new Vector3Int(1, 1);
             map[^2][^2] = (byte) GameMetrics.Points.PointB;
         }
 

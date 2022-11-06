@@ -10,9 +10,13 @@ namespace View.Game
 
         public override void UsePanel()
         {
-            _textWin.text = "WIN";//OR DEFEAT
-            _textScore.text = "Score: 123";
             SetEnable(true);
+        }
+
+        public void SetTitle(bool isWin)
+        {
+            _textWin.text = isWin ? "WIN" : "DEFEAT";
+            _textScore.text = "Score: 123";
         }
 
         public void OnClick_NextLevel()
